@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vinayak AI - Intelligent Legal, Tax & Corporate Compliance Advisor</title>
+  <meta name="description" content="Vinayak AI is an intelligent AI advisor for Legal Research, Direct Tax & GST Consultancy, Corporate Compliance (ROC/MCA), and academic guidance for CAs, CSs, and students." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23059669'><path d='M12 3v18M3 9l9-6 9 6M6 12l-3 6h6l-3-6zm12 0l-3 6h6l-3-6z'/></svg>" />
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="light-green-theme">
+  <div class="app-layout" id="appLayout">
+    <!-- Mobile Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <!-- App Brand -->
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="brand-logo">
+            <span class="logo-glow"></span>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18M3 9l9-6 9 6M6 12l-3 6h6l-3-6zm12 0l-3 6h6l-3-6z"></path>
+            </svg>
+          </div>
+          <div class="brand-meta">
+            <h1 class="brand-title">Vinayak<span> AI</span></h1>
+            <span class="brand-badge">Legal & Tax</span>
+          </div>
+        </div>
+        <button type="button" class="icon-btn close-sidebar-btn" id="closeSidebarBtn" title="Close sidebar" aria-label="Close sidebar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- New Chat Button -->
+      <div class="sidebar-action">
+        <button type="button" class="btn btn-primary new-chat-btn" id="newChatBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>New Chat</span>
+        </button>
+      </div>
+
+      <!-- Sessions List -->
+      <div class="sessions-nav">
+        <div class="sessions-header">
+          <span>Conversations</span>
+          <span class="session-count" id="sessionCount">0</span>
+        </div>
+        <div class="sessions-list" id="sessionsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-account-box" id="sidebarAccountBox">
+          <button type="button" class="sidebar-account-btn" id="sidebarAccountBtn" title="Account Profile">
+            <span class="account-avatar-sm" id="sidebarAccountAvatar">👤</span>
+            <div class="account-details-sm">
+              <span class="account-name-sm" id="sidebarAccountName">Guest User</span>
+              <span class="account-status-sm" id="sidebarAccountStatus">Create Account / Sign In</span>
+            </div>
+            <svg class="account-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+        <div class="sidebar-footer-row">
+          <div class="api-status-pill" id="apiStatusPill">
+            <span class="status-dot online"></span>
+            <span class="status-text">Connected</span>
+          </div>
+          <div class="footer-actions">
+            <button type="button" class="icon-btn footer-btn" id="openSettingsBtn" title="Settings & API Key" aria-label="Open settings">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+            <button type="button" class="icon-btn footer-btn" id="clearAllChatsBtn" title="Clear all chats" aria-label="Clear all chats">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CHAT INTERFACE -->
+    <main class="main-content" id="mainContent">
+      <!-- TOP HEADER BAR -->
+      <header class="chat-header">
+        <div class="header-left">
+          <button type="button" class="icon-btn sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle sidebar" aria-label="Toggle sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+
+          <!-- Vinayak AI Auto Work-Purpose Engine Indicator -->
+          <div class="auto-engine-badge" id="autoEngineBadge" title="Vinayak AI automatically selects the optimal AI intelligence engine for legal, tax, or compliance queries">
+            <span class="engine-indicator-pulse"></span>
+            <div class="engine-badge-content">
+              <span class="engine-brand-label">Vinayak AI</span>
+              <span class="engine-badge-sep">•</span>
+              <span class="engine-status" id="engineStatusText">Auto: Gemini Intelligence</span>
+            </div>
+            <!-- Hidden elements for app compatibility -->
+            <span id="currentModelLabel" style="display:none;">Auto Engine</span>
+            <span id="currentModelBadge" style="display:none;">Auto</span>
+          </div>
+
+          <!-- Modern Custom Persona Selector Dropdown -->
+          <div class="custom-dropdown-container" id="personaDropdownContainer">
+            <button type="button" class="custom-dropdown-trigger persona-trigger" id="personaDropdownTrigger" aria-haspopup="listbox" aria-expanded="false" title="Switch Advisory Domain">
+              <div class="trigger-left">
+                <span class="persona-trigger-emoji" id="currentPersonaIcon">📊</span>
+                <span class="trigger-label" id="currentPersonaLabel">Tax Consultant (Direct & GST)</span>
+              </div>
+              <svg class="trigger-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <!-- Custom Persona Flyout Menu -->
+            <div class="custom-dropdown-menu persona-menu hidden" id="personaDropdownMenu" role="listbox">
+              <div class="dropdown-header-title">Select Advisory Domain</div>
+              <div class="dropdown-scroll-list" id="personaOptionsList">
+                <!-- Dynamically populated persona cards -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button type="button" class="btn btn-ghost account-header-btn" id="headerAccountBtn" title="User Account">
+            <span class="account-avatar-pill" id="headerAccountAvatar">👤</span>
+            <span class="btn-text" id="headerAccountLabel">Account</span>
+          </button>
+          <button type="button" class="btn btn-ghost export-btn" id="exportChatBtn" title="Export Conversation" aria-label="Export conversation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span class="btn-text">Export</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- CHAT CONVERSATION VIEWPORT -->
+      <div class="chat-viewport" id="chatViewport">
+        <!-- WELCOME / EMPTY STATE -->
+        <div class="welcome-view" id="welcomeView">
+          <div class="welcome-hero">
+            <div class="hero-emblem">
+              <div class="emblem-halo"></div>
+              <div class="emblem-core">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v18M3 9l9-6 9 6M6 12l-3 6h6l-3-6zm12 0l-3 6h6l-3-6z"></path>
+                </svg>
+              </div>
+            </div>
+            <h2 class="hero-title">Vinayak AI</h2>
+            <p class="hero-subtitle">Your dedicated AI Advisor for Indian Accounting Standards (Ind AS/AS), Tally Prime, Bahi-Khata Bookkeeping, Direct Tax &amp; GST, Corporate Compliance (ROC/MCA), and Business Intelligence.</p>
+          </div>
+
+          <!-- Persona Cards -->
+          <div class="persona-chips-bar" id="personaChipsBar">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Quick Starter Prompts -->
+          <div class="prompt-starters-grid" id="startersGrid">
+            <!-- Dynamically populated from PROMPT_STARTERS -->
+          </div>
+        </div>
+
+        <!-- MESSAGES CONTAINER -->
+        <div class="messages-container" id="messagesContainer">
+          <!-- Dynamically populated with chat messages -->
+        </div>
+
+        <!-- TYPING / STREAMING INDICATOR -->
+        <div class="stream-indicator hidden" id="streamIndicator">
+          <div class="indicator-bubble">
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="pulse-dot"></span>
+            <span class="indicator-text" id="streamIndicatorText">Vinayak is analyzing statutory provisions...</span>
+          </div>
+        </div>
+
+        <!-- SCROLL TO BOTTOM BUTTON -->
+        <button type="button" class="scroll-bottom-btn hidden" id="scrollBottomBtn" title="Scroll to bottom" aria-label="Scroll to bottom">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+      </div>
+
+      <!-- BOTTOM INPUT COMPOSER -->
+      <footer class="chat-input-area">
+        <div class="input-container-card">
+          <form id="chatForm" class="chat-form">
+            <div class="textarea-wrapper">
+              <textarea
+                id="promptInput"
+                class="chat-textarea"
+                rows="1"
+                placeholder="Ask Vinayak about Direct Tax, GST, Companies Act, ROC compliance, drafting... (Shift + Enter for new line)"
+                aria-label="Chat prompt input"
+                autofocus
+              ></textarea>
+            </div>
+
+            <div class="input-actions-bar">
+              <div class="input-info-hint">
+                <button type="button" class="web-search-toggle-btn active" id="webSearchToggleBtn" title="Toggle Live Web Access">
+                  <svg class="globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                  <span class="web-toggle-label">Web: <strong id="webToggleState">ON</strong></span>
+                </button>
+                <span class="model-tag-badge" id="activeModelTag">LiquidAI (Fast &amp; Free)</span>
+              </div>
+              <div class="action-buttons-group">
+                <!-- Stop Generation Button -->
+                <button type="button" class="btn-action stop-btn hidden" id="stopBtn" title="Stop generating" aria-label="Stop generation">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"></rect></svg>
+                  <span>Stop</span>
+                </button>
+
+                <!-- Send Button -->
+                <button type="submit" class="btn-action send-btn" id="sendBtn" title="Send message" aria-label="Send message">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="input-disclaimer">
+          AI responses can occasionally be inaccurate. Vinayak AI · Privacy-first storage.
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div class="modal-overlay hidden" id="settingsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <h3>Vinayak AI Settings</h3>
+        </div>
+        <button type="button" class="icon-btn modal-close-btn" id="closeSettingsBtn" title="Close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Vinayak AI Model Architecture Selector (All Models List) -->
+        <div class="form-group">
+          <label for="settingsModelSelect" class="form-label">
+            <span>Vinayak AI Model Architecture</span>
+            <span class="badge-tag active" id="providerTagBadge">Gemini 2.5 Flash Active</span>
+          </label>
+          <select id="settingsModelSelect" class="form-select">
+            <optgroup label="⭐ Intelligent Auto Routing">
+              <option value="auto" selected>Auto Work-Purpose Routing (Recommended • Ultra Fast)</option>
+            </optgroup>
+            <optgroup label="⚡ Ultra-Fast Flagship Engines">
+              <option value="qwen/qwen3.8-27b">Vinayak Turbo 27B (Instant • Accounting, Tax & Compliance)</option>
+              <option value="openai/gpt-oss-120b">Vinayak Reasoning Flagship 120B (Deep Legal Logic)</option>
+              <option value="groq/compound-mini">Vinayak Instant Edge (Sub-Second Response)</option>
+            </optgroup>
+            <optgroup label="🆓 100% Free AI Models">
+              <option value="vinayak-autonomous-core">Vinayak Autonomous Core (Zero Cost • Always Operational)</option>
+              <option value="google/gemini-2.5-flash-lite">Gemini 2.5 Flash Lite (Fast)</option>
+              <option value="openrouter/free">Auto Multi-Model Free Router</option>
+              <option value="nvidia/nemotron-3.5-lightning:free">Nemotron 3.5 Lightning</option>
+              <option value="liquid/lfm-2.5-2.6b:free">Liquid LFM 2.5 (Lightweight Edge)</option>
+            </optgroup>
+            <optgroup label="⚡ High-Speed Cloud Models">
+              <option value="google/gemini-2.5-flash">Gemini 2.5 Flash</option>
+              <option value="google/gemini-2.5-pro">Gemini 2.5 Pro (Deep 2M Analysis)</option>
+            </optgroup>
+            <optgroup label="🧠 Pro Statutory, Tax & Accounting Models">
+              <option value="deepseek/deepseek-r1">DeepSeek R1 (Mathematical Logic)</option>
+              <option value="deepseek/deepseek-chat">DeepSeek V3 (Statutory High Throughput)</option>
+              <option value="deepseek/deepseek-r1-distill-llama-70b">DeepSeek R1 Distill 70B</option>
+              <option value="qwen/qwen-2.5-72b-instruct">Qwen 2.5 72B Instruct</option>
+              <option value="qwen/qwen-2.5-coder-32b-instruct">Qwen 2.5 Coder 32B (Tally & Accounting Formulas)</option>
+              <option value="meta-llama/llama-3.3-70b-instruct">Meta Llama 3.3 70B</option>
+            </optgroup>
+          </select>
+          <p class="form-hint" id="providerHelpHint">Vinayak AI automatically optimizes reasoning speed, context, and mathematical precision for your work purpose.</p>
+        </div>
+
+        <!-- Live Web Search Toggle -->
+        <div class="form-group">
+          <div class="switch-row">
+            <div class="switch-info">
+              <label for="settingsWebSearch" class="form-label">Live Web Access (Real-Time Browsing)</label>
+              <p class="form-hint">Permits models to search the web in real-time for live data, current news, and documentation.</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="settingsWebSearch" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Auto Work-Purpose Routing Toggle -->
+        <div class="form-group">
+          <div class="switch-row">
+            <div class="switch-info">
+              <label for="settingsAutoRouting" class="form-label">Auto Work-Purpose Model Routing</label>
+              <p class="form-hint">Automatically chooses the best intelligence engine for Legal Research, Tax Consultancy, and Corporate Compliance.</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="settingsAutoRouting" checked />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Custom Model input option -->
+        <div class="form-group">
+          <label for="settingsCustomModel" class="form-label">Custom Model Identifier (Optional)</label>
+          <input
+            type="text"
+            id="settingsCustomModel"
+            class="form-input code-font"
+            placeholder="e.g. meta-llama/llama-3.3-70b-instruct"
+          />
+          <p class="form-hint">Enter any supported model identifier for custom intelligence routing.</p>
+        </div>
+
+        <!-- Temperature Slider -->
+        <div class="form-group">
+          <div class="slider-header">
+            <label for="settingsTemp" class="form-label">Temperature: <span id="tempValueDisplay" class="value-highlight">0.7</span></label>
+            <span class="slider-subtext">Lower = Focused &amp; Deterministic · Higher = Creative &amp; Spontaneous</span>
+          </div>
+          <input
+            type="range"
+            id="settingsTemp"
+            min="0"
+            max="1.5"
+            step="0.05"
+            value="0.7"
+            class="range-slider"
+          />
+        </div>
+
+        <!-- Max Tokens Slider -->
+        <div class="form-group">
+          <div class="slider-header">
+            <label for="settingsMaxTokens" class="form-label">Max Generation Tokens: <span id="tokensValueDisplay" class="value-highlight">800</span></label>
+            <span class="slider-subtext">Recommended: 800 tokens for optimal statutory responses without credit reservation limits</span>
+          </div>
+          <input
+            type="range"
+            id="settingsMaxTokens"
+            min="256"
+            max="4096"
+            step="128"
+            value="800"
+            class="range-slider"
+          />
+        </div>
+
+        <!-- Custom Persona System Prompt -->
+        <div class="form-group">
+          <label for="settingsCustomPrompt" class="form-label">Custom Persona System Prompt</label>
+          <textarea
+            id="settingsCustomPrompt"
+            class="form-textarea"
+            rows="3"
+            placeholder="Define custom behavior, rules, and style for the Custom Persona..."
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" id="resetSettingsBtn">Reset Defaults</button>
+        <button type="button" class="btn btn-primary" id="saveSettingsBtn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT & GOOGLE SHEETS BACKEND MODAL -->
+  <div class="modal-overlay hidden" id="accountModal">
+    <div class="modal-card account-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <h3 id="accountModalTitle">Vinayak AI Account</h3>
+        </div>
+        <button type="button" class="icon-btn modal-close-btn" id="closeAccountBtn" title="Close" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- Account Tabs -->
+      <div class="account-tabs">
+        <button type="button" class="account-tab-btn active" id="tabRegisterBtn" data-tab="register">Create Account</button>
+        <button type="button" class="account-tab-btn" id="tabLoginBtn" data-tab="login">Sign In</button>
+        <button type="button" class="account-tab-btn" id="tabProfileBtn" data-tab="profile">My Profile</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Register Form -->
+        <form id="registerForm" class="account-form-pane">
+          <div class="form-group">
+            <label for="regName" class="form-label">Full Name</label>
+            <input type="text" id="regName" class="form-input" placeholder="e.g. Saswata Ghosh" required autocomplete="name" />
+          </div>
+          <div class="form-group">
+            <label for="regEmail" class="form-label">Email Address</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="regPassword" class="form-label">Password</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Create a secure password (min 4 chars)" required autocomplete="new-password" />
+          </div>
+          <div class="auth-error-msg" id="registerErrorMsg"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="submitRegisterBtn">Create My Account</button>
+        </form>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="account-form-pane hidden">
+          <div class="form-group">
+            <label for="loginEmail" class="form-label">Email Address</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+          <div class="form-group">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required autocomplete="current-password" />
+          </div>
+          <div class="auth-error-msg" id="loginErrorMsg"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="submitLoginBtn">Sign In</button>
+        </form>
+
+        <!-- Profile View -->
+        <div id="profilePane" class="account-form-pane hidden">
+          <div class="profile-card" id="profileCardInfo">
+            <!-- Dynamically populated or default guest view -->
+          </div>
+
+          <!-- Self-Learning & Training Dataset Box -->
+          <div class="intelligence-box training-export-box">
+            <div class="box-header">
+              <span class="box-icon">🧠</span>
+              <div>
+                <h4>Vinayak Adaptive Intelligence &amp; Training Dataset</h4>
+                <p class="form-hint">Vinayak continuously learns from your feedback (👍 / 👎) to enhance domain precision and statutory citation accuracy.</p>
+              </div>
+            </div>
+            <div class="training-stats-row">
+              <span class="stat-pill">Dataset Size: <strong id="trainingCountDisplay">0</strong> approved pairs</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="exportTrainingJsonlBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export Dataset (JSONL)
+              </button>
+            </div>
+            <p class="form-hint">Export standard instruction-tuning JSONL format ready for domain fine-tuning or vector embeddings.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer account-modal-footer">
+        <button type="button" class="btn btn-ghost" id="accountCloseFooterBtn">Close</button>
+        <button type="button" class="btn btn-danger hidden" id="logoutAccountBtn">Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

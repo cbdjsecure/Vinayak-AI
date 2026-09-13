@@ -14,14 +14,12 @@ export const Storage = {
     const defaultGroqKey = (typeof import.meta !== "undefined" && import.meta.env?.VITE_GROQ_API_KEY) || APP_CONFIG.defaultGroqApiKey;
     const defaultOpenRouterKey = (typeof import.meta !== "undefined" && import.meta.env?.VITE_OPENROUTER_API_KEY) || APP_CONFIG.defaultApiKey;
     const defaultGeminiKey = (typeof import.meta !== "undefined" && import.meta.env?.VITE_GEMINI_API_KEY) || "";
-    const defaultQwenKey = (typeof import.meta !== "undefined" && import.meta.env?.VITE_QWEN_API_KEY) || "";
 
     const defaults = {
       provider: "groq",
       groqApiKey: defaultGroqKey,
       apiKey: defaultOpenRouterKey,
       geminiApiKey: defaultGeminiKey,
-      qwenApiKey: defaultQwenKey,
       model: APP_CONFIG.defaultModel,
       autoRouting: true,
       persona: "tax",
@@ -37,11 +35,9 @@ export const Storage = {
       if (stored) {
         const parsed = JSON.parse(stored);
         // Scrub any sensitive backend API keys from client localStorage
-        if (parsed.groqApiKey || parsed.apiKey || parsed.geminiApiKey || parsed.qwenApiKey) {
           delete parsed.groqApiKey;
           delete parsed.apiKey;
           delete parsed.geminiApiKey;
-          delete parsed.qwenApiKey;
           localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(parsed));
         }
 
@@ -53,7 +49,6 @@ export const Storage = {
           groqApiKey: defaultGroqKey,
           apiKey: defaultOpenRouterKey,
           geminiApiKey: defaultGeminiKey,
-          qwenApiKey: defaultQwenKey,
           maxTokens: clampedTokens,
         };
       }
@@ -70,7 +65,6 @@ export const Storage = {
       delete sanitized.groqApiKey;
       delete sanitized.apiKey;
       delete sanitized.geminiApiKey;
-      delete sanitized.qwenApiKey;
       localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(sanitized));
     } catch (e) {
       console.error("Failed to save settings", e);

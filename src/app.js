@@ -4,7 +4,7 @@ import { renderMarkdown } from "./markdown.js";
 import { OpenRouterClient, stripThinking, sanitizeErrorMessage } from "./api.js";
 import { AuthService } from "./auth.js";
 import { AutonomousEngine, isInappropriateOrSexual, isRandomSymbolsWithoutText, isQuestionMarkOnly } from "./autonomous-engine.js";
-import { buildLegalLinksMarkdown } from "./legal-links.js";
+
 
 class VinayakApp {
   constructor() {
@@ -168,8 +168,6 @@ class VinayakApp {
       return (this.settings.groqApiKey && this.settings.groqApiKey.trim()) || APP_CONFIG.defaultGroqApiKey;
     } else if (provider === "gemini") {
       return (this.settings.geminiApiKey && this.settings.geminiApiKey.trim()) || "";
-    } else if (provider === "qwen") {
-      return (this.settings.qwenApiKey && this.settings.qwenApiKey.trim()) || "";
     }
     return (this.settings.apiKey && this.settings.apiKey.trim()) || APP_CONFIG.defaultApiKey;
   }
@@ -575,9 +573,8 @@ class VinayakApp {
       if (this.dom.engineStatusText) {
         this.dom.engineStatusText.textContent = "Vinayak AI • Ready";
       }
-      if (provider === "groq") return "qwen/qwen3.8-27b";
+      if (provider === "groq") return "groq/compound-mini";
       if (provider === "gemini") return "gemini-2.0-flash";
-      if (provider === "qwen") return "qwen-turbo";
       return "google/gemini-2.5-flash";
     }
 
@@ -586,9 +583,8 @@ class VinayakApp {
         if (this.dom.engineStatusText) {
           this.dom.engineStatusText.textContent = `Auto: ${rule.label}`;
         }
-        if (provider === "groq") return rule.directGroqModel || rule.recommendedModel || "qwen/qwen3.8-27b";
+        if (provider === "groq") return rule.directGroqModel || rule.recommendedModel || "groq/compound-mini";
         if (provider === "gemini") return rule.directGeminiModel || "gemini-2.0-flash";
-        if (provider === "qwen") return rule.directQwenModel || "qwen-plus";
         return rule.recommendedModel;
       }
     }
@@ -596,9 +592,8 @@ class VinayakApp {
     if (this.dom.engineStatusText) {
       this.dom.engineStatusText.textContent = provider === "groq" ? "Auto: Vinayak Turbo" : "Auto: Gemini Intelligence";
     }
-    if (provider === "groq") return "qwen/qwen3.8-27b";
+    if (provider === "groq") return "groq/compound-mini";
     if (provider === "gemini") return "gemini-2.0-flash";
-    if (provider === "qwen") return "qwen-plus";
     return APP_CONFIG.fallbackModel;
   }
 
@@ -703,10 +698,6 @@ class VinayakApp {
         },
         (result) => {
           let finalContent = result.content || fullContent;
-          const extraLinks = buildLegalLinksMarkdown(finalContent, promptText);
-          if (extraLinks && !finalContent.includes("indiacode.nic.in") && !finalContent.includes("indiankanoon.org")) {
-            finalContent += extraLinks;
-          }
           bubbleEl.innerHTML = renderMarkdown(finalContent);
 
           const assistantMessage = {
@@ -739,11 +730,7 @@ class VinayakApp {
       );
     } catch (err) {
       console.error("Autonomous stream error:", err);
-      let fallbackContent = AutonomousEngine.resolveAnswer(promptText, this.settings.persona);
-      const extraLinks = buildLegalLinksMarkdown(fallbackContent, promptText);
-      if (extraLinks && !fallbackContent.includes("indiacode.nic.in") && !fallbackContent.includes("indiankanoon.org")) {
-        fallbackContent += extraLinks;
-      }
+      let fallbackContent = AutonomousEngine.resolveAnswer(promptText, this.settings.persona) || "";
       bubbleEl.innerHTML = renderMarkdown(fallbackContent);
       const assistantMessage = {
         id: assistantMsgId,
@@ -780,10 +767,6 @@ class VinayakApp {
         },
         onDone: (result) => {
           let finalContent = stripThinking(result.content || fullContent || "*(No response generated)*");
-          const extraLinks = buildLegalLinksMarkdown(finalContent, promptText);
-          if (extraLinks && !finalContent.includes("indiacode.nic.in") && !finalContent.includes("indiankanoon.org")) {
-            finalContent += extraLinks;
-          }
           bubbleEl.innerHTML = renderMarkdown(finalContent);
 
           // Save assistant message to storage (strictly without thinking tags)

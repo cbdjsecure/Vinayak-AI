@@ -180,10 +180,13 @@ export class OpenRouterClient {
           });
         }
 
-        // Seamless self-healing fallback to Autonomous Intelligence Core if upstream quota/credit cap reached
+        // Credit/quota exhausted — surface a real error to the UI
         if ((response.status === 402 || response.status === 429) && isDefaultKey) {
-          console.warn("[Vinayak AI Auto-Recovery] Upstream credit/quota reached. Switching seamlessly to Autonomous Intelligence Core...");
-          return AutonomousEngine.streamResponse(lastUserMsg, "general", signal, onChunk, onDone);
+          const quotaErr = new Error("API credit limit reached. Please add your own API key in Settings, or switch to a different model.");
+          quotaErr.status = response.status;
+          quotaErr.isRateLimit = true;
+          if (onError) onError(quotaErr);
+          return;
         }
 
         const sanitizedMsg = sanitizeErrorMessage(errorMsg);
@@ -298,8 +301,11 @@ export class OpenRouterClient {
           errMsg.includes("insufficient")) &&
         isDefaultKey
       ) {
-        console.warn("[Vinayak AI Auto-Recovery] Caught upstream credit/quota constraint. Seamlessly activating Autonomous Intelligence Core...");
-        return AutonomousEngine.streamResponse(lastUserMsg, "general", signal, onChunk, onDone);
+        const quotaErr = new Error("API credit limit reached. Please add your own API key in Settings, or switch to a different model.");
+        quotaErr.status = err.status;
+        quotaErr.isRateLimit = true;
+        if (onError) onError(quotaErr);
+        return;
       }
 
       if (onError) onError(err);
@@ -344,16 +350,6 @@ export class OpenRouterClient {
           return { valid: false, error: `Invalid Google Gemini key (${res.status})` };
         }
         return { valid: true, data: { label: "Google AI Studio Verified" } };
-      } else if (this.provider === "qwen") {
-        // Test Qwen / DashScope key via models list
-        const res = await fetch(`${this.baseUrl}/models`, {
-          headers: { Authorization: `Bearer ${this.apiKey.trim()}` },
-        });
-        if (!res.ok) {
-          return { valid: false, error: `Invalid DashScope / Qwen key (${res.status})` };
-        }
-        return { valid: true, data: { label: "Alibaba DashScope Verified" } };
-      }
       return { valid: true };
     } catch (e) {
       return { valid: false, error: e.message };

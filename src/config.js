@@ -32,7 +32,7 @@ export const APP_CONFIG = {
   defaultProvider: "groq",
   defaultGroqApiKey: (typeof import.meta !== "undefined" && import.meta.env?.VITE_GROQ_API_KEY) || getBuiltinGroqKey(),
   defaultApiKey: (typeof import.meta !== "undefined" && import.meta.env?.VITE_OPENROUTER_API_KEY) || getBuiltinEngineKey(),
-  defaultModel: "qwen/qwen3.8-27b",
+  defaultModel: "groq/compound-mini",
   fallbackModel: "vinayak-autonomous-core",
   apiBaseUrl: "https://api.groq.com/openai/v1",
   siteUrl: "http://localhost:5173",
@@ -194,14 +194,13 @@ export const PROVIDERS = {
     id: "groq",
     name: "Vinayak AI Ultra-Fast Engine (Groq LPU)",
     baseUrl: "https://api.groq.com/openai/v1",
-    defaultModel: "qwen/qwen3.8-27b",
+    defaultModel: "groq/compound-mini",
     keyName: "Groq LPU API Key",
     keyPlaceholder: "gsk_...",
     docUrl: "https://console.groq.com/keys",
     models: [
-      { id: "qwen/qwen3.8-27b", name: "Qwen 3.8 27B", tag: "Groq LPU Ultra Fast", context: "131K" },
-      { id: "openai/gpt-oss-120b", name: "GPT-OSS 120B", tag: "Deep Reasoning Flagship", context: "128K" },
       { id: "groq/compound-mini", name: "Groq Compound Mini", tag: "Sub-Second Edge", context: "64K" },
+      { id: "openai/gpt-oss-120b", name: "GPT-OSS 120B", tag: "Deep Reasoning Flagship", context: "128K" },
     ],
   },
   openrouter: {
@@ -222,25 +221,12 @@ export const PROVIDERS = {
       { id: "gemini-1.5-pro", name: "Gemini 1.5 Pro", tag: "Deep Analysis", context: "2M" },
     ],
   },
-  qwen: {
-    id: "qwen",
-    name: "Alibaba Qwen Direct Engine (DashScope API)",
-    baseUrl: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-    defaultModel: "qwen-plus",
-    models: [
-      { id: "qwen-plus", name: "Qwen Plus", tag: "Alibaba Balanced", context: "131K" },
-      { id: "qwen-max", name: "Qwen Max", tag: "Alibaba Top Tier", context: "32K" },
-      { id: "qwen-turbo", name: "Qwen Turbo", tag: "Ultra Fast", context: "131K" },
-      { id: "qwen2.5-72b-instruct", name: "Qwen 2.5 72B Instruct", tag: "Open Flagship", context: "131K" },
-      { id: "qwen2.5-coder-32b-instruct", name: "Qwen 2.5 Coder 32B", tag: "Drafting & Code", context: "32K" },
-    ],
   },
 };
 
 export const FALLBACK_FREE_MODELS = [
-  "qwen/qwen3.8-27b",
-  "openai/gpt-oss-120b",
   "groq/compound-mini",
+  "openai/gpt-oss-120b",
   "vinayak-autonomous-core",
   "google/gemini-2.5-flash-lite",
   "openrouter/free",
@@ -258,11 +244,10 @@ export const WORK_ROUTING_RULES = [
       "as 2", "as 10", "ind as", "ind as 115", "ind as 116", "emi", "working capital",
       "bookkeeping", "daybook", "petty cash", "bank reconciliation", "brs", "business idea"
     ],
-    recommendedModel: "qwen/qwen3.8-27b",
+    recommendedModel: "groq/compound-mini",
     fallbackModel: "openai/gpt-oss-120b",
-    directGroqModel: "qwen/qwen3.8-27b",
+    directGroqModel: "groq/compound-mini",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen2.5-coder-32b-instruct",
   },
   {
     purpose: "tax",
@@ -272,11 +257,10 @@ export const WORK_ROUTING_RULES = [
       "itc", "gstr", "80c", "advance tax", "salary", "regime", "deduction", "itat",
       "computation", "assessment", "gstin", "reverse charge", "e-way"
     ],
-    recommendedModel: "qwen/qwen3.8-27b",
+    recommendedModel: "groq/compound-mini",
     fallbackModel: "openai/gpt-oss-120b",
-    directGroqModel: "qwen/qwen3.8-27b",
+    directGroqModel: "groq/compound-mini",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen-plus",
   },
   {
     purpose: "compliance",
@@ -287,11 +271,10 @@ export const WORK_ROUTING_RULES = [
       "secretarial", "ss-1", "ss-2", "agm", "egm", "quorum", "audit", "caro", "sebi",
       "lodr", "fema", "fdi", "incorporation", "aoa", "moa"
     ],
-    recommendedModel: "qwen/qwen3.8-27b",
-    fallbackModel: "openai/gpt-oss-120b",
+    recommendedModel: "openai/gpt-oss-120b",
+    fallbackModel: "groq/compound-mini",
     directGroqModel: "openai/gpt-oss-120b",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen2.5-coder-32b-instruct",
   },
   {
     purpose: "drafting",
@@ -300,11 +283,10 @@ export const WORK_ROUTING_RULES = [
       "draft", "notice", "agreement", "contract", "resolution", "nda", "lease deed",
       "mou", "petition", "affidavit", "power of attorney", "indemnity", "clause"
     ],
-    recommendedModel: "qwen/qwen3.8-27b",
-    fallbackModel: "openai/gpt-oss-120b",
+    recommendedModel: "openai/gpt-oss-120b",
+    fallbackModel: "groq/compound-mini",
     directGroqModel: "openai/gpt-oss-120b",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen2.5-coder-32b-instruct",
   },
   {
     purpose: "student",
@@ -314,11 +296,10 @@ export const WORK_ROUTING_RULES = [
       "icai", "icsi", "exam", "syllabus", "case study", "study notes", "mnemonic",
       "revision", "question", "marks", "practical problem", "student"
     ],
-    recommendedModel: "qwen/qwen3.8-27b",
+    recommendedModel: "groq/compound-mini",
     fallbackModel: "openai/gpt-oss-120b",
-    directGroqModel: "qwen/qwen3.8-27b",
+    directGroqModel: "groq/compound-mini",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen-plus",
   },
   {
     purpose: "general_law",
@@ -329,10 +310,9 @@ export const WORK_ROUTING_RULES = [
       "evidence", "arbitration", "limitation", "ibc", "insolvency"
     ],
     recommendedModel: "openai/gpt-oss-120b",
-    fallbackModel: "qwen/qwen3.8-27b",
+    fallbackModel: "groq/compound-mini",
     directGroqModel: "openai/gpt-oss-120b",
     directGeminiModel: "gemini-2.0-flash",
-    directQwenModel: "qwen-max",
   },
 ];
 
